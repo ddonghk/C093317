@@ -1,0 +1,165 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class RespawnManager : MonoBehaviour
+{
+    public bool GameOver = false; // 게임 패배?
+    public bool GameWin = false; // 게임 승리?
+
+    public Transform[] respawn = new Transform[5]; // 적이 생성 위치 배열
+    public GameObject[] Enemy = new GameObject[10]; // 적 종류
+
+    public int CurrentEnemy = 0; // 현재까지 생성된 적 개수
+
+    public void Enemy0_0()
+    {
+        // 0번 적을 0번 길에 소환
+        GameObject newEnemy = Instantiate(Enemy[0], respawn[0].position, Quaternion.identity);
+        CurrentEnemy += 1;
+    }
+
+    public void Enemy0_1()
+    {
+        // 0번 적을 1번 길에 소환
+        GameObject newEnemy = Instantiate(Enemy[0], respawn[1].position, Quaternion.identity);
+        CurrentEnemy += 1;
+    }
+
+    public void Enemy0_2()
+    {
+        // 0번 적을 2번 길에 소환
+        GameObject newEnemy = Instantiate(Enemy[0], respawn[2].position, Quaternion.identity);
+        CurrentEnemy += 1;
+    }
+
+    public void Enemy0_3()
+    {
+        // 0번 적을 3번 길에 소환
+        GameObject newEnemy = Instantiate(Enemy[0], respawn[3].position, Quaternion.identity);
+        CurrentEnemy += 1;
+    }
+    public void Enemy0_4()
+    {
+        // 0번 적을 4번 길에 소환
+        GameObject newEnemy = Instantiate(Enemy[0], respawn[4].position, Quaternion.identity);
+        CurrentEnemy += 1;
+    }
+
+    public void Enemy1_0()
+    {
+        // 1번 적을 0번 길에 소환
+        GameObject newEnemy = Instantiate(Enemy[1], respawn[0].position, Quaternion.identity);
+        CurrentEnemy += 1;
+    }
+
+    public void Enemy1_1()
+    {
+        // 1번 적을 1번 길에 소환
+        GameObject newEnemy = Instantiate(Enemy[1], respawn[1].position, Quaternion.identity);
+        CurrentEnemy += 1;
+    }
+
+    public void Enemy1_2()
+    {
+        // 1번 적을 2번 길에 소환
+        GameObject newEnemy = Instantiate(Enemy[1], respawn[2].position, Quaternion.identity);
+        CurrentEnemy += 1;
+    }
+
+    public void Enemy1_3()
+    {
+        // 1번 적을 3번 길에 소환
+        GameObject newEnemy = Instantiate(Enemy[1], respawn[3].position, Quaternion.identity);
+        CurrentEnemy += 1;
+    }
+    public void Enemy1_4()
+    {
+        // 1번 적을 4번 길에 소환
+        GameObject newEnemy = Instantiate(Enemy[1], respawn[4].position, Quaternion.identity);
+        CurrentEnemy += 1;
+    }
+
+    public void Enemy2_0()
+    {
+        // 2번 적을 0번 길에 소환
+        GameObject newEnemy = Instantiate(Enemy[2], respawn[0].position, Quaternion.identity);
+        CurrentEnemy += 1;
+    }
+
+    public void Enemy2_1()
+    {
+        // 2번 적을 1번 길에 소환
+        GameObject newEnemy = Instantiate(Enemy[2], respawn[1].position, Quaternion.identity);
+        CurrentEnemy += 1;
+    }
+
+    public void Enemy2_2()
+    {
+        // 2번 적을 2번 길에 소환
+        GameObject newEnemy = Instantiate(Enemy[2], respawn[2].position, Quaternion.identity);
+        CurrentEnemy += 1;
+    }
+
+    public void Enemy2_3()
+    {
+        // 2번 적을 3번 길에 소환
+        GameObject newEnemy = Instantiate(Enemy[2], respawn[3].position, Quaternion.identity);
+        CurrentEnemy += 1;
+    }
+    public void Enemy2_4()
+    {
+        // 2번 적을 4번 길에 소환
+        GameObject newEnemy = Instantiate(Enemy[2], respawn[4].position, Quaternion.identity);
+        CurrentEnemy += 1;
+    }
+
+    public void Enemy3_0()
+    {
+        // 3번 적을 0번 길에 소환
+        GameObject newEnemy = Instantiate(Enemy[3], respawn[0].position, Quaternion.identity);
+        CurrentEnemy += 1;
+    }
+
+    public void Enemy3_1()
+    {
+        // 3번 적을 1번 길에 소환
+        GameObject newEnemy = Instantiate(Enemy[3], respawn[1].position, Quaternion.identity);
+        CurrentEnemy += 1;
+    }
+
+    public void Enemy3_2()
+    {
+        // 3번 적을 2번 길에 소환
+        GameObject newEnemy = Instantiate(Enemy[3], respawn[2].position, Quaternion.identity);
+        CurrentEnemy += 1;
+    }
+
+    public void Enemy3_3()
+    {
+        // 3번 적을 3번 길에 소환
+        GameObject newEnemy = Instantiate(Enemy[3], respawn[3].position, Quaternion.identity);
+        CurrentEnemy += 1;
+    }
+    public void Enemy3_4()
+    {
+        // 3번 적을 4번 길에 소환
+        GameObject newEnemy = Instantiate(Enemy[3], respawn[4].position, Quaternion.identity);
+        CurrentEnemy += 1;
+    }
+    public void Enemy_Magic()
+    {
+        // 마법냥(4)을 3번째 길에 소환
+        GameObject newEnemy = Instantiate(Enemy[4], respawn[2].position, Quaternion.identity);
+        CurrentEnemy += 1;
+    }
+
+
+}
+
+
+
+
+
+
