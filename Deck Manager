@@ -1,0 +1,191 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
+public class DeckManager : MonoBehaviour
+{
+    [HideInInspector] // 인스펙터창에 노출시키지 않는 애트리뷰트(노출시킬 필요 없음)
+    public bool Is_Card_Spawn_Complete = false; // 카드 최초 스폰이 완료됐는지?
+    [HideInInspector]
+    public GameObject[] AllCard; // 에피소드 별 모든 카드를 임시보관하는 변수
+    public void Set_AllCard(GameObject[] allCard) => AllCard = allCard;
+    [HideInInspector]
+    public RectTransform[] SpawnPoints; // 에피소드 카드 생성위치 변수
+    public void Set_SpawnPoints(RectTransform[] spawnPoints) => SpawnPoints = spawnPoints;
+    public int Next_Card_Index; // 다음에 올 카드의 인덱스
+
+    int card_Location_Index_0 = -1;
+    // 카드를 고정적으로 담는 위치의 인덱스(0~4번의 5개의 인덱스 존재)
+    [HideInInspector]
+    public int Card_Location_Index_0
+    {
+        get => card_Location_Index_0;
+        set
+        {
+            card_Location_Index_0 = value;
+            // 카드 최초 스폰이 완료된 상태에서 인덱스 값이 바뀐다면 카드 교체 이벤트 실행
+            StartCoroutine(CardChangeEvent(0, value));
+        }
+    }
+    int card_Location_Index_1 = -1;
+    [HideInInspector]
+    public int Card_Location_Index_1
+    {
+        get => card_Location_Index_1;
+        set
+        {
+            card_Location_Index_1 = value;
+            StartCoroutine(CardChangeEvent(1, value));
+        }
+    }
+    int card_Location_Index_2 = -1;
+    [HideInInspector]
+    public int Card_Location_Index_2
+    {
+        get => card_Location_Index_2;
+        set
+        {
+            card_Location_Index_2 = value;
+            StartCoroutine(CardChangeEvent(2, value));
+        }
+    }
+    int card_Location_Index_3 = -1;
+    [HideInInspector]
+    public int Card_Location_Index_3
+    {
+        get => card_Location_Index_3;
+        set
+        {
+            card_Location_Index_3 = value;
+            StartCoroutine(CardChangeEvent(3, value));
+        }
+    }
+    int card_Location_Index_4 = -1;
+    [HideInInspector]
+    public int Card_Location_Index_4
+    {
+        get => card_Location_Index_4;
+        set
+        {
+            card_Location_Index_4 = value;
+            StartCoroutine(CardChangeEvent(4, value));
+        }
+    }
+
+    readonly float CardChange_LimitTime = 0.3f; // 카드 교체 중 클릭 불가능한 시간
+    [HideInInspector]
+    public bool Is_Clickable = true; // 카드 교체 중 클릭 가능여부
+
+    [HideInInspector]
+    public int Selected_Card_Location_Index; // 마지막으로 선택했던 카드의 선택된 위치 인덱스.
+
+    // 덱 편집에서 유닛이 장착중인지?
+    public bool Use_Card_Churu;
+    public bool Use_Card_Warrior;
+    public bool Use_Card_Mini;
+    public bool Use_Card_Ballet;
+    public bool Use_Card_Bread;
+    public bool Use_Card_Magic;
+
+    // 덱 편집에 필요한 파워 한계치
+    public int Current_Power;
+
+    // 덱 편집에 사용되는 유닛 파워량
+    public readonly int PowerUsage_Churu = 15;
+    public readonly int PowerUsage_Warrior = 5;
+    public readonly int PowerUsage_Mini = 3;
+    public readonly int PowerUsage_Ballet = 6;
+    public readonly int PowerUsage_Bread = 8;
+    public readonly int PowerUsage_Magic = 20;
+
+    // 덱 편집에 최대 사용 가능한 카드 수량
+    public readonly int Maximum_Card_Count = 9;
+
+    // 덱 편집에 들어갈때마다 유닛 장착정보 초기화
+    public void Init_Use_Cards()
+    {
+        Use_Card_Churu = false;
+        Use_Card_Warrior = false;
+        Use_Card_Mini = false;
+        Use_Card_Ballet = false;
+        Use_Card_Bread = false;
+        Use_Card_Magic = false;
+
+        Current_Power = 0;
+    }
+
+    // 다음 카드가 있는지 확인하는 함수
+    public bool Has_Next_Card()
+    {
+        return Next_Card_Index < AllCard.Length;
+    }
+
+    // 카드 교체할때 실행되는 이벤트
+    // 향후 카드 교체에 필요한 애니메이션을 인덱스 값에 맞춰서 넣어주면 됨
+    IEnumerator CardChangeEvent(int card_Location_Index, int change_Card_Index) // 몇 번째 카드 인덱스 인지?, 교체되는 카드의 인덱스 값
+    {
+        // 다음 카드가 없다면 카드를 생성하지 않음
+        if (!Has_Next_Card())
+            yield break;
+
+        // 최초 생성은 클릭제어를 건너뜀
+        if (Is_Card_Spawn_Complete)
+        {
+            Is_Clickable = false;
+            // new 를 안넣고 캐싱한 시간 값으로 사용하면, 코루틴 시간 값에 오차가 있을 수 있어서 new 를 붙여서 사용
+            yield return new WaitForSeconds(CardChange_LimitTime);
+        }
+
+        // AllCard 배열에서 SpawnIndex 에 해당하는 카드를 선택하여 해당 스폰 포인트에 생성
+        GameObject newCard = Instantiate(AllCard[change_Card_Index], SpawnPoints[card_Location_Index].position, Quaternion.identity);
+        var drag_Manager = newCard.GetComponent<Drag_Manager>();
+        // 현재 카드가 몇 번째 위치에 들어가는지 결정
+        if (drag_Manager != null)
+        {
+            drag_Manager.Set_Card_Location_Index(card_Location_Index);
+            // 카드의 정보가 바뀔때 마다 다음에 올 카드의 인덱스 정보가 바뀜
+            Next_Card_Index++;
+        }
+
+        if (Is_Card_Spawn_Complete)
+        {
+            Is_Clickable = true;
+        }
+        yield return null;
+    }
+
+    // 카드 위치 마다 AllCard 인덱스 번호에 맞게 셋팅하는 함수
+    public void Set_Card_Location_Index(int card_Location_Index, int change_Card_Index)
+    {
+        switch (card_Location_Index)
+        {
+            case 0:
+                {
+                    Card_Location_Index_0 = change_Card_Index;
+                    break;
+                }
+            case 1:
+                {
+                    Card_Location_Index_1 = change_Card_Index;
+                    break;
+                }
+            case 2:
+                {
+                    Card_Location_Index_2 = change_Card_Index;
+                    break;
+                }
+            case 3:
+                {
+                    Card_Location_Index_3 = change_Card_Index;
+                    break;
+                }
+            case 4:
+                {
+                    Card_Location_Index_4 = change_Card_Index;
+                    break;
+                }
+        }
+    }
+}
