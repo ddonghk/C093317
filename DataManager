@@ -1,0 +1,605 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System.IO;
+using System;
+
+public class DataManager : MonoBehaviour
+{
+    #region 소유한 장난감 데이터
+    [SerializeField] OwnedUnitData ownedUnitData = new();
+    public readonly string ownedUnitPath = "OwnedUnit.json";
+    public bool Has_Churu
+    {
+        get => ownedUnitData.Has_Churu;
+        set
+        {
+            ownedUnitData.Has_Churu = value;
+            // 값이 바뀔때 마다 자동저장
+            SaveData(ownedUnitPath, ownedUnitData);
+        }
+    }
+    public bool Has_Warrior
+    {
+        get => ownedUnitData.Has_Warrior;
+        set
+        {
+            ownedUnitData.Has_Warrior = value;
+            SaveData(ownedUnitPath, ownedUnitData);
+        }
+    }
+    public bool Has_Mini
+    {
+        get => ownedUnitData.Has_Mini;
+        set
+        {
+            ownedUnitData.Has_Mini = value;
+            SaveData(ownedUnitPath, ownedUnitData);
+        }
+    }
+    public bool Has_Ballet
+    {
+        get => ownedUnitData.Has_Ballet;
+        set
+        {
+            ownedUnitData.Has_Ballet = value;
+            SaveData(ownedUnitPath, ownedUnitData);
+        }
+    }
+    public bool Has_Bread
+    {
+        get => ownedUnitData.Has_Bread;
+        set
+        {
+            ownedUnitData.Has_Bread = value;
+            SaveData(ownedUnitPath, ownedUnitData);
+        }
+    }
+    public bool Has_Magic
+    {
+        get => ownedUnitData.Has_Magic;
+        set
+        {
+            ownedUnitData.Has_Magic = value;
+            SaveData(ownedUnitPath, ownedUnitData);
+        }
+    }
+    public int Churu_Level
+    {
+        get => ownedUnitData.Churu_Level;
+        set
+        {
+            ownedUnitData.Churu_Level = value;
+            SaveData(ownedUnitPath, ownedUnitData);
+        }
+    }
+    public int Warrior_Level
+    {
+        get => ownedUnitData.Warrior_Level;
+        set
+        {
+            ownedUnitData.Warrior_Level = value;
+            SaveData(ownedUnitPath, ownedUnitData);
+        }
+    }
+    public int Mini_Level
+    {
+        get => ownedUnitData.Mini_Level;
+        set
+        {
+            ownedUnitData.Mini_Level = value;
+            SaveData(ownedUnitPath, ownedUnitData);
+        }
+    }
+    public int Ballet_Level
+    {
+        get => ownedUnitData.Ballet_Level;
+        set
+        {
+            ownedUnitData.Ballet_Level = value;
+            SaveData(ownedUnitPath, ownedUnitData);
+        }
+    }
+    public int Bread_Level
+    {
+        get => ownedUnitData.Bread_Level;
+        set
+        {
+            ownedUnitData.Bread_Level = value;
+            SaveData(ownedUnitPath, ownedUnitData);
+        }
+    }
+    public int Magic_Level
+    {
+        get => ownedUnitData.Magic_Level;
+        set
+        {
+            ownedUnitData.Magic_Level = value;
+            SaveData(ownedUnitPath, ownedUnitData);
+        }
+    }
+    #endregion
+
+    #region 장착한 유닛 데이터
+    [SerializeField] EquipUnitData equipUnitData = new();
+    public readonly string equipUnitPath = "EquipUnit.json";
+    public int Equip_Churu
+    {
+        get => equipUnitData.Equip_Churu;
+        set
+        {
+            equipUnitData.Equip_Churu = value;
+            SaveData(equipUnitPath, equipUnitData);
+        }
+    }
+    public int Equip_Warrior
+    {
+        get => equipUnitData.Equip_Warrior;
+        set
+        {
+            equipUnitData.Equip_Warrior = value;
+            SaveData(equipUnitPath, equipUnitData);
+        }
+    }
+    public int Equip_Mini
+    {
+        get => equipUnitData.Equip_Mini;
+        set
+        {
+            equipUnitData.Equip_Mini = value;
+            SaveData(equipUnitPath, equipUnitData);
+        }
+    }
+    public int Equip_Ballet
+    {
+        get => equipUnitData.Equip_Ballet;
+        set
+        {
+            equipUnitData.Equip_Ballet = value;
+            SaveData(equipUnitPath, equipUnitData);
+        }
+    }
+    public int Equip_Bread
+    {
+        get => equipUnitData.Equip_Bread;
+        set
+        {
+            equipUnitData.Equip_Bread = value;
+            SaveData(equipUnitPath, equipUnitData);
+        }
+    }
+    public int Equip_Magic
+    {
+        get => equipUnitData.Equip_Magic;
+        set
+        {
+            equipUnitData.Equip_Magic = value;
+            SaveData(equipUnitPath, equipUnitData);
+        }
+    }
+    public int Equip_Churu_Digit
+    {
+        get => equipUnitData.Equip_Churu_Digit;
+        set
+        {
+            equipUnitData.Equip_Churu_Digit = value;
+            SaveData(equipUnitPath, equipUnitData);
+        }
+    }
+    public int Equip_Warrior_Digit
+    {
+        get => equipUnitData.Equip_Warrior_Digit;
+        set
+        {
+            equipUnitData.Equip_Warrior_Digit = value;
+            SaveData(equipUnitPath, equipUnitData);
+            // 사용중인 카드가 덱에 올려져 있는 상태라면? 장착수량 변동량을 UI에 전달해주는 이벤트 실행
+            Use_Deck_Card_Warrior.UpdateCardCount?.Invoke(value);
+        }
+    }
+    public int Equip_Mini_Digit
+    {
+        get => equipUnitData.Equip_Mini_Digit;
+        set
+        {
+            equipUnitData.Equip_Mini_Digit = value;
+            SaveData(equipUnitPath, equipUnitData);
+            Use_Deck_Card_Mini.UpdateCardCount?.Invoke(value);
+        }
+    }
+    public int Equip_Ballet_Digit
+    {
+        get => equipUnitData.Equip_Ballet_Digit;
+        set
+        {
+            equipUnitData.Equip_Ballet_Digit = value;
+            SaveData(equipUnitPath, equipUnitData);
+            Use_Deck_Card_Ballet.UpdateCardCount?.Invoke(value);
+        }
+    }
+    public int Equip_Bread_Digit
+    {
+        get => equipUnitData.Equip_Bread_Digit;
+        set
+        {
+            equipUnitData.Equip_Bread_Digit = value;
+            SaveData(equipUnitPath, equipUnitData);
+            Use_Deck_Card_Bread.UpdateCardCount?.Invoke(value);
+        }
+    }
+    public int Equip_Magic_Digit
+    {
+        get => equipUnitData.Equip_Magic_Digit;
+        set
+        {
+            equipUnitData.Equip_Magic_Digit = value;
+            SaveData(equipUnitPath, equipUnitData);
+        }
+    }
+    #endregion
+
+    // 골드 데이터
+    [SerializeField] GoldData goldData = new();
+    public readonly string goldPath = "Gold.json";
+    public int Gold
+    {
+        get => goldData.Gold;
+        set
+        {
+            goldData.Gold = value;
+            SaveData(goldPath, goldData);
+        }
+    }
+
+    #region 스테이지 데이터
+    [SerializeField] StageData stageData = new();
+    public readonly string stagePath = "Stage.json";
+    public bool TutorialClear
+    {
+        get => stageData.TutorialClear;
+        set
+        {
+            stageData.TutorialClear = value;
+            SaveData(stagePath, stageData);
+        }
+    }
+    public bool StageClear_1_1
+    {
+        get => stageData.StageClear_1_1;
+        set
+        {
+            stageData.StageClear_1_1 = value;
+            SaveData(stagePath, stageData);
+        }
+    }
+    public bool StageClear_1_2
+    {
+        get => stageData.StageClear_1_2;
+        set
+        {
+            stageData.StageClear_1_2 = value;
+            SaveData(stagePath, stageData);
+        }
+    }
+    public bool StageClear_1_3
+    {
+        get => stageData.StageClear_1_3;
+        set
+        {
+            stageData.StageClear_1_3 = value;
+            SaveData(stagePath, stageData);
+        }
+    }
+    public bool StageClear_1_4
+    {
+        get => stageData.StageClear_1_4;
+        set
+        {
+            stageData.StageClear_1_4 = value;
+            SaveData(stagePath, stageData);
+        }
+    }
+    public bool StageClear_1_5
+    {
+        get => stageData.StageClear_1_5;
+        set
+        {
+            stageData.StageClear_1_5 = value;
+            SaveData(stagePath, stageData);
+        }
+    }
+    public bool StageClear_1_6
+    {
+        get => stageData.StageClear_1_6;
+        set
+        {
+            stageData.StageClear_1_6 = value;
+            SaveData(stagePath, stageData);
+        }
+    }
+    public bool StageClear_1_7
+    {
+        get => stageData.StageClear_1_7;
+        set
+        {
+            stageData.StageClear_1_7 = value;
+            SaveData(stagePath, stageData);
+        }
+    }
+    public bool StageClear_1_8
+    {
+        get => stageData.StageClear_1_8;
+        set
+        {
+            stageData.StageClear_1_8 = value;
+            SaveData(stagePath, stageData);
+        }
+    }
+
+    public bool AcquireKey_1_2
+    {
+        get => stageData.AcquireKey_1_2;
+        set
+        {
+            stageData.AcquireKey_1_2 = value;
+            SaveData(stagePath, stageData);
+        }
+    }
+    public bool AcquireKey_1_3
+    {
+        get => stageData.AcquireKey_1_3;
+        set
+        {
+            stageData.AcquireKey_1_3 = value;
+            SaveData(stagePath, stageData);
+        }
+    }
+    public bool AcquireKey_1_4
+    {
+        get => stageData.AcquireKey_1_4;
+        set
+        {
+            stageData.AcquireKey_1_4 = value;
+            SaveData(stagePath, stageData);
+        }
+    }
+    public bool AcquireKey_1_5
+    {
+        get => stageData.AcquireKey_1_5;
+        set
+        {
+            stageData.AcquireKey_1_5 = value;
+            SaveData(stagePath, stageData);
+        }
+    }
+    public bool AcquireKey_1_6
+    {
+        get => stageData.AcquireKey_1_6;
+        set
+        {
+            stageData.AcquireKey_1_6 = value;
+            SaveData(stagePath, stageData);
+        }
+    }
+    public bool AcquireKey_1_7
+    {
+        get => stageData.AcquireKey_1_7;
+        set
+        {
+            stageData.AcquireKey_1_7 = value;
+            SaveData(stagePath, stageData);
+        }
+    }
+    public bool AcquireKey_1_8
+    {
+        get => stageData.AcquireKey_1_8;
+        set
+        {
+            stageData.AcquireKey_1_8 = value;
+            SaveData(stagePath, stageData);
+        }
+    }
+    public bool Start_1_1
+    {
+        get => stageData.Start_1_1;
+        set
+        {
+            stageData.Start_1_1 = value;
+            SaveData(stagePath, stageData);
+        }
+    }
+    public bool Start_1_2
+    {
+        get => stageData.Start_1_2;
+        set
+        {
+            stageData.Start_1_2 = value;
+            SaveData(stagePath, stageData);
+        }
+    }
+    public bool Start_1_3
+    {
+        get => stageData.Start_1_3;
+        set
+        {
+            stageData.Start_1_3 = value;
+            SaveData(stagePath, stageData);
+        }
+    }
+    public bool Start_1_4
+    {
+        get => stageData.Start_1_4;
+        set
+        {
+            stageData.Start_1_4 = value;
+            SaveData(stagePath, stageData);
+        }
+    }
+    public bool Start_1_5
+    {
+        get => stageData.Start_1_5;
+        set
+        {
+            stageData.Start_1_5 = value;
+            SaveData(stagePath, stageData);
+        }
+    }
+    public bool Start_1_6
+    {
+        get => stageData.Start_1_6;
+        set
+        {
+            stageData.Start_1_6 = value;
+            SaveData(stagePath, stageData);
+        }
+    }
+    public bool Start_1_7
+    {
+        get => stageData.Start_1_7;
+        set
+        {
+            stageData.Start_1_7 = value;
+            SaveData(stagePath, stageData);
+        }
+    }
+    public bool Start_1_8
+    {
+        get => stageData.Start_1_8;
+        set
+        {
+            stageData.Start_1_8 = value;
+            SaveData(stagePath, stageData);
+        }
+    }
+    #endregion
+
+    private void Start()
+    {
+        LoadAllData();
+    }
+
+    // 최초 로딩시 모든 데이터를 불러옴
+    // * 데이터를 추가할 때 마다 추가해줘야 함
+    void LoadAllData()
+    {
+        LoadData<OwnedUnitData>(ownedUnitPath, ref ownedUnitData);
+        LoadData<EquipUnitData>(equipUnitPath, ref equipUnitData);
+        LoadData<GoldData>(goldPath, ref goldData);
+        LoadData<StageData>(stagePath, ref stageData);
+    }
+
+    // 매개변수로 받는 json 타입은 ref로 전달해서 함수 안에서 값을 넣어줘도 밖에서 적용되게끔 함
+    // JsonUtility.FromJson 함수와 상호작용을 위해 <T> 타입을 지정해줘야 함
+    public void LoadData<T>(string lastPath, ref T json)
+    {
+        var path = Path.Combine(Application.persistentDataPath, lastPath);
+
+        // 지정경로에 파일이 있다면, 현재값 저장
+        if (File.Exists(path))
+            json = JsonUtility.FromJson<T>(File.ReadAllText(path));
+        // 지정경로에 파일이 없다면 class에서 설정한 초기값으로 저장
+        else
+            SaveData(lastPath, json);
+    }
+
+    public void SaveData(string lastPath, object json)
+    {
+        var path = Path.Combine(Application.persistentDataPath, lastPath);
+
+        // 데이터들을 json으로 변환 후 지정경로에 저장
+        File.WriteAllText(path, JsonUtility.ToJson(json));
+    }
+
+    public void ResetData()
+    {
+        SaveData(ownedUnitPath, new OwnedUnitData());
+        SaveData(equipUnitPath, new EquipUnitData());
+        SaveData(goldPath, new GoldData());
+        SaveData(stagePath, new StageData());
+    }
+
+    [Serializable]
+    public class OwnedUnitData
+    {
+        [Header("유닛 획득")]
+        public bool Has_Churu = true;
+        public bool Has_Warrior = true;
+        public bool Has_Mini = false;
+        public bool Has_Ballet = false;
+        public bool Has_Bread = false;
+        public bool Has_Magic = false;
+
+        [Header("유닛 레벨")]
+        public int Churu_Level = 0;
+        public int Warrior_Level = 0;
+        public int Mini_Level = 0;
+        public int Ballet_Level = 0;
+        public int Bread_Level = 0;
+        public int Magic_Level = 0;
+    }
+
+    // 각 클래스 안에 변수 값은 데이터들의 초기값
+    // 초기값이 변경되면, 인스펙터창에서 DataManager 스크립트 초기화 후 저장
+    // 실행중에 DataManager에서 실시간으로 바꿀 수 있음
+    [Serializable]
+    public class EquipUnitData
+    {
+        // 장착중인 인덱스에 따라 값이 바뀜, 초기값 -1(장착안한 상태)
+        [Header("유닛 장착중")]
+        public int Equip_Churu = 0;
+        public int Equip_Warrior = 1;
+        public int Equip_Mini = -1;
+        public int Equip_Ballet = -1;
+        public int Equip_Bread = -1;
+        public int Equip_Magic = -1;
+
+        [Header("장착한 유닛 수")]
+        public int Equip_Churu_Digit = 1;
+        public int Equip_Warrior_Digit = 5;
+        public int Equip_Mini_Digit = 0;
+        public int Equip_Ballet_Digit = 0;
+        public int Equip_Bread_Digit = 0;
+        public int Equip_Magic_Digit = 0;
+    }
+
+    [Serializable]
+    public class GoldData
+    {
+        public int Gold = 0;
+    }
+
+    [Serializable]
+    private class StageData
+    {
+        public bool TutorialClear = false;
+
+        [Header("스테이지 클리어")]
+        public bool StageClear_1_1 = false;
+        public bool StageClear_1_2 = false;
+        public bool StageClear_1_3 = false;
+        public bool StageClear_1_4 = false;
+        public bool StageClear_1_5 = false;
+        public bool StageClear_1_6 = false;
+        public bool StageClear_1_7 = false;
+        public bool StageClear_1_8 = false;
+
+        [Header("키 획득")]
+        public bool AcquireKey_1_2 = false;
+        public bool AcquireKey_1_3 = false;
+        public bool AcquireKey_1_4 = false;
+        public bool AcquireKey_1_5 = false;
+        public bool AcquireKey_1_6 = false;
+        public bool AcquireKey_1_7 = false;
+        public bool AcquireKey_1_8 = false;
+
+        [Header("스테이지 시작")]
+        public bool Start_1_1 = false;
+        public bool Start_1_2 = false;
+        public bool Start_1_3 = false;
+        public bool Start_1_4 = false;
+        public bool Start_1_5 = false;
+        public bool Start_1_6 = false;
+        public bool Start_1_7 = false;
+        public bool Start_1_8 = false;
+    }
+}
